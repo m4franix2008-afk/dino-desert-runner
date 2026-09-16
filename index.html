@@ -1,256 +1,913 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
-<head><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9243381326991051"
-     crossorigin="anonymous"></script>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dino Desert Runner 3D Prototype</title>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>Dino Desert Runner</title>
+
+<!-- =========================================
+     الصق كود Google AdSense الحقيقي هنا
+     ========================================= -->
+
+<!-- مثال فقط، لا تستخدمه كما هو:
+<script async
+src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXX"
+crossorigin="anonymous"></script>
+-->
+
 <style>
-  *{box-sizing:border-box}
-  body{margin:0;background:#e9d2ad;font-family:Arial,sans-serif;color:#3d281d;overflow-x:hidden}
-  #wrap{max-width:1200px;margin:auto;padding:12px}
-  header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:#fff4dfcc;border:2px solid #b88b58;border-radius:18px;padding:12px 16px}
-  h1{margin:0;font-size:clamp(20px,3vw,34px)}
-  .sub{font-size:13px;opacity:.8}
-  #gameShell{position:relative;margin-top:12px;border:3px solid #8d633e;border-radius:18px;overflow:hidden;box-shadow:0 10px 30px #5a351b33;background:#b7dcf4}
-  canvas{display:block;width:100%;height:auto;aspect-ratio:16/9;touch-action:manipulation}
-  #hud{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;align-items:flex-start;gap:8px;pointer-events:none}
-  .panel{background:#fff4dfdd;border:2px solid #9a6d42;border-radius:12px;padding:8px 12px;font-weight:bold;box-shadow:0 4px 12px #4a2b1820}
-  #overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#1d160d55}
-  .modal{width:min(92%,460px);background:#fff4df;border:3px solid #8d633e;border-radius:18px;padding:24px;text-align:center;box-shadow:0 14px 40px #0004}
-  .modal h2{margin-top:0}
-  input,button{font:inherit;border-radius:10px;border:2px solid #9a6d42;padding:10px 12px}
-  input{width:100%;margin:8px 0;background:white}
-  button{cursor:pointer;background:#6d9e45;color:white;border-color:#456b2a;font-weight:bold}
-  button.secondary{background:#e9d2ad;color:#3d281d;border-color:#9a6d42}
-  .buttons{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
-  #leaderboard{margin-top:12px;background:#fff4dfdd;border:2px solid #b88b58;border-radius:16px;padding:14px}
-  #leaderboard h2{margin:0 0 8px}
-  ol{margin:0;padding-right:24px}
-  li{padding:5px 0;border-bottom:1px solid #d9b98e}
-  li:last-child{border-bottom:0}
-  .note{font-size:13px;opacity:.8;margin-top:8px}
-  .hidden{display:none!important}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f5f0e8;
+  font-family: Arial, sans-serif;
+  color: #3b3028;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+main {
+  width: min(100%, 1200px);
+  padding: 16px;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  direction: ltr;
+  margin-bottom: 10px;
+}
+
+.title {
+  font-weight: 800;
+  font-size: 20px;
+}
+
+.score {
+  font: 700 24px monospace;
+  letter-spacing: 1px;
+}
+
+.game {
+  position: relative;
+  overflow: hidden;
+  border-radius: 14px;
+  box-shadow: 0 8px 30px #5b402522;
+  background: #d9b27d;
+}
+
+.game canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16/7;
+  touch-action: manipulation;
+}
+
+.panel {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #f8ecdccc;
+}
+
+.dialog {
+  text-align: center;
+  background: #fff7e8ee;
+  border: 1px solid #b99368;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 10px 35px #4b301c22;
+}
+
+.dialog h1 {
+  font-size: 30px;
+  margin: 0 0 10px;
+}
+
+.dialog p {
+  font-size: 15px;
+  margin: 0 0 18px;
+}
+
+.btn {
+  border: 1px solid #65472f;
+  background: #65472f;
+  color: #fff;
+  border-radius: 8px;
+  padding: 12px 22px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #805b3d;
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.hint {
+  text-align: center;
+  color: #786858;
+  font-size: 13px;
+  margin-top: 10px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* مساحة إعلان أسفل اللعبة */
+.ad-container {
+  min-height: 90px;
+  margin: 18px auto;
+  text-align: center;
+}
 </style>
 </head>
-<body>
-<div id="wrap">
-<header>
-  <div>
-    <h1>🦖 Dino Desert Runner</h1>
-    <div class="sub">نسخة تجريبية للكمبيوتر — اقفز فوق الصبار واجمع أعلى رقم قياسي</div>
-  </div>
-  <div class="panel">التحكم: Space / ↑ / نقرة</div>
-</header>
 
-<div id="gameShell">
-  <canvas id="game" width="1280" height="720" aria-label="لعبة ديناصور في الصحراء"></canvas>
-  <div id="hud">
-    <div class="panel">اللاعب: <span id="playerLabel">ضيف</span></div>
-    <div class="panel">النقاط: <span id="score">000000</span> | الأفضل: <span id="best">000000</span></div>
+<body>
+<main>
+
+  <div class="top">
+    <div class="title">🦖 Dino Desert Runner</div>
+    <div class="score" id="score">HI 000000 000000</div>
   </div>
-  <div id="overlay">
-    <div class="modal">
-      <h2 id="modalTitle">Dino Desert Runner</h2>
-      <p id="modalText">اكتب اسمك ثم ابدأ اللعب.</p>
-      <input id="nameInput" maxlength="20" placeholder="اسم اللاعب" autocomplete="nickname">
-      <div class="buttons">
-        <button id="startBtn">ابدأ اللعب</button>
-        <button id="againBtn" class="secondary hidden">إعادة اللعب</button>
+
+  <div class="game">
+    <canvas
+      id="canvas"
+      width="1200"
+      height="525"
+      aria-label="لعبة ديناصور في صحراء واقعية">
+    </canvas>
+
+    <div class="panel" id="start">
+      <div class="dialog">
+        <h1>🦖 Dino Desert</h1>
+        <p>اركض في الصحراء وتفادى الصبار والصخور</p>
+        <button class="btn" id="play">ابدأ اللعب</button>
       </div>
-      <div class="note">الترتيب العالمي يحتاج إعداد Firebase في آخر الملف.</div>
+    </div>
+
+    <div class="panel hidden" id="over">
+      <div class="dialog">
+        <h1>انتهت اللعبة</h1>
+        <p id="result"></p>
+        <button class="btn" id="again">إعادة اللعب</button>
+      </div>
     </div>
   </div>
-</div>
 
-<section id="leaderboard">
-  <h2>🏆 الترتيب العالمي</h2>
-  <ol id="scores"><li>جاري تحميل النتائج...</li></ol>
-  <div class="note">إذا لم تُفعّل Firebase بعد، سيظهر ترتيب محلي على هذا الجهاز.</div>
-</section>
-</div>
+  <!-- =========================================
+       إعلان أسفل اللعبة
+       بعد موافقة AdSense، ضع كود الوحدة
+       الإعلانية هنا إذا أعطاك Google كودًا
+       ========================================= -->
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-import { getFirestore, collection, query, orderBy, limit, getDocs, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+  <div class="ad-container">
 
-/* ضع إعدادات مشروعك هنا من Firebase Console.
-   القيم التالية تخص مشروع dino-desert-runner الظاهر في صورتك. */
-const firebaseConfig = {
-  apiKey: "AIzaSyAzaSyD5VH5QmqDRUv22JJitEvENN-LV9QIH2I",
-  authDomain: "dino-desert-runner.firebaseapp.com",
-  projectId: "dino-desert-runner",
-  storageBucket: "dino-desert-runner.firebasestorage.app",
-  messagingSenderId: "710375277324",
-  appId: "1:710375277324:web:dc6da816b9b2ab2aebff29",
-  measurementId: "G-7HX4HSH5G3"
-};
+    <!-- الصق كود وحدة الإعلان هنا بعد الموافقة -->
 
-const canvas=document.getElementById("game"),ctx=canvas.getContext("2d");
-const W=canvas.width,H=canvas.height,ground=570;
-const scoreEl=document.getElementById("score"),bestEl=document.getElementById("best");
-const playerLabel=document.getElementById("playerLabel"),overlay=document.getElementById("overlay");
-const modalTitle=document.getElementById("modalTitle"),modalText=document.getElementById("modalText");
-const nameInput=document.getElementById("nameInput"),startBtn=document.getElementById("startBtn"),againBtn=document.getElementById("againBtn");
-const scoresEl=document.getElementById("scores");
+    <!-- مثال فقط:
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-XXXXXXXXXXXX"
+         data-ad-slot="XXXXXXXXXX"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
 
-let player=localStorage.getItem("dinoPlayer")||"ضيف";
-let best=Number(localStorage.getItem("dinoBest")||0),score=0,playing=false,gameOver=false;
-let speed=8,spawn=0,last=0,cloudOffset=0,obstacles=[],dust=[],raf=0;
-let dino={x:190,y:ground-145,w:125,h:145,vy:0,onGround:true,frame:0};
-playerLabel.textContent=player;bestEl.textContent=fmt(best);nameInput.value=player;
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+    -->
 
-function fmt(n){return String(Math.floor(n)).padStart(6,"0")}
-function rand(a,b){return a+Math.random()*(b-a)}
-function jump(){if(!playing)return;if(dino.onGround){dino.vy=-23;dino.onGround=false}}
-function start(){
-  player=(nameInput.value.trim()||"ضيف").slice(0,20);
-  localStorage.setItem("dinoPlayer",player);playerLabel.textContent=player;
-  score=0;speed=8;spawn=0;obstacles=[];dust=[];dino.y=ground-dino.h;dino.vy=0;dino.onGround=true;playing=true;gameOver=false;
-  overlay.classList.add("hidden");againBtn.classList.add("hidden");startBtn.classList.remove("hidden");
-  cancelAnimationFrame(raf);last=performance.now();raf=requestAnimationFrame(loop);
-}
-function end(){
-  playing=false;gameOver=true;best=Math.max(best,Math.floor(score));localStorage.setItem("dinoBest",best);
-  bestEl.textContent=fmt(best);saveScore(player,best);
-  modalTitle.textContent="انتهت اللعبة!";
-  modalText.textContent=`نتيجتك: ${fmt(score)} — الرقم القياسي: ${fmt(best)}`;
-  startBtn.classList.add("hidden");againBtn.classList.remove("hidden");overlay.classList.remove("hidden");
-}
-startBtn.onclick=start;againBtn.onclick=start;
-addEventListener("keydown",e=>{if(["Space","ArrowUp"].includes(e.code)){e.preventDefault();if(!playing)start();else jump()}});
-canvas.addEventListener("pointerdown",()=>playing?jump():start());
+  </div>
 
-function loop(t){
-  if(!playing)return;
-  const dt=Math.min((t-last)/16.67,2);last=t;
-  update(dt);draw();raf=requestAnimationFrame(loop);
-}
-function update(dt){
-  score+=0.18*dt*speed;speed=Math.min(18,8+score/900);
-  scoreEl.textContent=fmt(score);
-  dino.vy+=1.15*dt;dino.y+=dino.vy*dt;
-  if(dino.y>=ground-dino.h){dino.y=ground-dino.h;dino.vy=0;dino.onGround=true}
-  dino.frame+=dt;
-  spawn-=dt;
-  if(spawn<=0){spawn=rand(82,140)/Math.sqrt(speed/8);obstacles.push({x:W+90,w:rand(62,96),h:rand(95,170),type:Math.random()<.72?"cactus":"rocks"})}
-  obstacles.forEach(o=>o.x-=speed*dt);
-  obstacles=obstacles.filter(o=>o.x>-150);
-  for(const o of obstacles){
-    const a={x:dino.x+25,y:dino.y+22,w:dino.w-42,h:dino.h-30};
-    const b={x:o.x+8,y:ground-o.h,w:o.w-16,h:o.h};
-    if(a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y){end();return}
+  <div class="controls">
+    <button class="btn" id="jump">⬆ قفز</button>
+    <button class="btn" id="reset">↻ إعادة</button>
+  </div>
+
+  <div class="hint">
+    Space / ↑ للقفز — R لإعادة اللعب — اضغط على الشاشة في الجوال
+  </div>
+
+</main>
+
+<script>
+(() => {
+  const c = document.getElementById('canvas');
+  const x = c.getContext('2d');
+
+  const W = c.width;
+  const H = c.height;
+  const ground = 405;
+
+  let state = 'ready';
+  let score = 0;
+  let best = 0;
+  let speed = 520;
+  let last = 0;
+  let spawn = 1.5;
+  let player;
+  let obs = [];
+  let clouds = [];
+  let dust = [];
+  let sunX = 980;
+
+  const $ = id => document.getElementById(id);
+
+  const rand = (a, b) => a + Math.random() * (b - a);
+
+  function reset() {
+    score = 0;
+    speed = 520;
+    spawn = 1.5;
+    obs = [];
+    dust = [];
+
+    clouds = [
+      { x: 80, y: 105, w: 90 },
+      { x: 520, y: 75, w: 120 },
+      { x: 930, y: 125, w: 80 }
+    ];
+
+    player = {
+      x: 180,
+      y: ground - 82,
+      w: 58,
+      h: 82,
+      vy: 0,
+      on: true,
+      frame: 0
+    };
+
+    hud();
+    draw();
   }
-  cloudOffset=(cloudOffset+0.25*dt)%W;
-  if(Math.random()<.4){dust.push({x:dino.x+20,y:ground+rand(0,8),life:1})}
-  dust.forEach(p=>{p.x-=speed*dt*.6;p.life-=.035*dt});dust=dust.filter(p=>p.life>0);
-}
-function draw(){
-  const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,"#8ed0ef");g.addColorStop(1,"#f5c77d");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  // sun
-  ctx.fillStyle="#ffe9a1";ctx.beginPath();ctx.arc(210,120,70,0,Math.PI*2);ctx.fill();
-  // distant mountains and pyramids
-  ctx.fillStyle="#d6a66d";ctx.beginPath();ctx.moveTo(0,420);ctx.lineTo(170,260);ctx.lineTo(330,420);ctx.lineTo(480,250);ctx.lineTo(650,420);ctx.lineTo(850,270);ctx.lineTo(1040,420);ctx.lineTo(1200,240);ctx.lineTo(W,420);ctx.lineTo(W,ground);ctx.lineTo(0,ground);ctx.fill();
-  pyramid(850,ground-10,250,190);pyramid(1030,ground-5,180,140);
-  // clouds
-  ctx.strokeStyle="#fff4dfaa";ctx.lineWidth=10;
-  for(let i=0;i<4;i++){let x=((i*370-cloudOffset*1.5+W*2)%W)-80,y=100+i%2*90;ctx.beginPath();ctx.arc(x,y,28,Math.PI,0);ctx.arc(x+35,y-15,40,Math.PI,0);ctx.arc(x+80,y,28,Math.PI,0);ctx.stroke()}
-  // desert
-  ctx.fillStyle="#e9b66e";ctx.fillRect(0,ground,W,H-ground);
-  ctx.fillStyle="#c78b4c";ctx.fillRect(0,ground,W,5);
-  for(let i=0;i<45;i++){let x=(i*97+Math.floor(score*4))%W;ctx.fillRect(x,ground+25+(i%5)*22,rand(4,18),3)}
-  for(const p of dust){ctx.globalAlpha=p.life;ctx.fillStyle="#8c603c";ctx.beginPath();ctx.arc(p.x,p.y,3+p.life*4,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1}
-  obstacles.forEach(drawObstacle);drawDino();
-}
-function pyramid(x,y,w,h){ctx.fillStyle="#b87943";ctx.beginPath();ctx.moveTo(x-w/2,y);ctx.lineTo(x,y-h);ctx.lineTo(x+w/2,y);ctx.closePath();ctx.fill();ctx.fillStyle="#e2b77c";ctx.beginPath();ctx.moveTo(x,y-h);ctx.lineTo(x+w/2,y);ctx.lineTo(x+10,y);ctx.closePath();ctx.fill()}
-function drawObstacle(o){
-  ctx.save();ctx.translate(o.x,ground);
-  if(o.type==="cactus"){
-    // صبار صحراوي أكثر واقعية مع تدرج ضوء وظلال وأشواك واضحة
-    const bodyW=Math.max(26,o.w*.42);
-    const green=ctx.createLinearGradient(0,0,bodyW,0);
-    green.addColorStop(0,"#284f2b");
-    green.addColorStop(.35,"#4f7d3c");
-    green.addColorStop(.7,"#78934b");
-    green.addColorStop(1,"#294d2b");
-    ctx.fillStyle=green;ctx.strokeStyle="#203d25";ctx.lineWidth=4;
 
-    roundRect(22,-o.h,bodyW,o.h,bodyW/2);ctx.fill();ctx.stroke();
+  function hud() {
+    $('score').textContent =
+      'HI ' +
+      String(best).padStart(6, '0') +
+      ' ' +
+      String(Math.floor(score)).padStart(6, '0');
+  }
 
-    // الذراع اليسرى
-    roundRect(-2,-o.h*.60,25,Math.min(82,o.h*.34),12);ctx.fill();ctx.stroke();
-    roundRect(-2,-o.h*.60,25,30,12);ctx.fill();ctx.stroke();
+  function start() {
+    reset();
+    state = 'playing';
 
-    // الذراع اليمنى
-    const rx=22+bodyW-5;
-    roundRect(rx,-o.h*.78,25,Math.min(98,o.h*.40),12);ctx.fill();ctx.stroke();
-    roundRect(rx,-o.h*.78,25,30,12);ctx.fill();ctx.stroke();
+    $('start').classList.add('hidden');
+    $('over').classList.add('hidden');
 
-    // أخاديد الصبار
-    ctx.strokeStyle="#a9bd72";ctx.lineWidth=2;
-    for(let k=0;k<4;k++){
-      const xx=28+k*(bodyW-10)/3;
-      ctx.beginPath();ctx.moveTo(xx,-o.h+18);ctx.quadraticCurveTo(xx-5,-o.h*.55,xx,-12);ctx.stroke();
+    last = performance.now();
+    requestAnimationFrame(loop);
+  }
+
+  function end() {
+    state = 'over';
+    best = Math.max(best, Math.floor(score));
+
+    $('result').textContent =
+      'النقاط: ' +
+      Math.floor(score) +
+      ' — الرقم القياسي: ' +
+      best;
+
+    $('over').classList.remove('hidden');
+  }
+
+  function jump() {
+    if (state === 'ready' || state === 'over') {
+      start();
+      return;
     }
 
-    // أشواك صغيرة
-    ctx.strokeStyle="#d8d9a0";ctx.lineWidth=1.5;
-    for(let yy=-o.h+20;yy<-8;yy+=24){
-      ctx.beginPath();ctx.moveTo(19,yy);ctx.lineTo(11,yy-3);ctx.stroke();
-      ctx.beginPath();ctx.moveTo(22+bodyW,yy+7);ctx.lineTo(31+bodyW,yy+3);ctx.stroke();
+    if (state === 'playing' && player.on) {
+      player.vy = -920;
+      player.on = false;
     }
-  }else{
-    const rock=ctx.createRadialGradient(o.w*.35,-o.h*.65,4,o.w/2,-o.h/2,o.w);
-    rock.addColorStop(0,"#b89a75");rock.addColorStop(1,"#604a38");
-    ctx.fillStyle=rock;ctx.beginPath();ctx.ellipse(o.w/2,-o.h/2,o.w/2,o.h/2,0,0,Math.PI*2);ctx.fill();
-    ctx.strokeStyle="#4f3a2b";ctx.lineWidth=3;ctx.stroke();
-    ctx.fillStyle="#d0b18a";ctx.beginPath();ctx.ellipse(o.w*.38,-o.h*.63,o.w*.25,o.h*.2,0,0,Math.PI*2);ctx.fill();
   }
-  ctx.restore();
-}
-function roundRect(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
-function drawDino(){
-  const x=dino.x,y=dino.y,run=Math.floor(dino.frame/5)%2;
-  ctx.save();ctx.translate(x,y);
-  // realistic stylized T-rex silhouette
-  ctx.fillStyle="#70452e";ctx.strokeStyle="#43291f";ctx.lineWidth=5;
-  ctx.beginPath();ctx.moveTo(25,105);ctx.quadraticCurveTo(-20,75,8,40);ctx.quadraticCurveTo(25,15,70,25);ctx.lineTo(102,5);ctx.quadraticCurveTo(130,0,133,25);ctx.lineTo(110,50);ctx.lineTo(91,53);ctx.lineTo(83,86);ctx.lineTo(102,108);ctx.lineTo(91,119);ctx.lineTo(67,101);ctx.lineTo(55,125);ctx.lineTo(39,125);ctx.lineTo(43,94);ctx.lineTo(25,105);ctx.closePath();ctx.fill();ctx.stroke();
-  ctx.fillStyle="#c77a52";ctx.beginPath();ctx.moveTo(88,25);ctx.lineTo(126,23);ctx.lineTo(112,42);ctx.lineTo(89,42);ctx.closePath();ctx.fill();
-  ctx.fillStyle="#fff4df";ctx.beginPath();ctx.arc(107,18,5,0,Math.PI*2);ctx.fill();ctx.fillStyle="#1b1510";ctx.beginPath();ctx.arc(108,18,2,0,Math.PI*2);ctx.fill();
-  ctx.strokeStyle="#43291f";ctx.lineWidth=4;ctx.beginPath();ctx.moveTo(82,55);ctx.lineTo(98,67);ctx.lineTo(90,76);ctx.moveTo(54,120);ctx.lineTo(45,140);ctx.lineTo(25,140);ctx.moveTo(83,111);ctx.lineTo(90,136);ctx.lineTo(110,136);ctx.stroke();
-  if(run){ctx.beginPath();ctx.moveTo(45,140);ctx.lineTo(56,140);ctx.moveTo(90,136);ctx.lineTo(100,136);ctx.stroke()}
-  ctx.restore();
-}
-async function initFirebase(){
-  try{
-    const app=initializeApp(firebaseConfig);
-    const auth=getAuth(app);await signInAnonymously(auth);
-    window.db=getFirestore(app);window.firebaseReady=true;loadScores();
-  }catch(e){window.firebaseReady=false;loadScores();console.warn("Firebase غير جاهز:",e)}
-}
-async function saveScore(name,value){
-  const local=JSON.parse(localStorage.getItem("localScores")||"[]");
-  local.push({name,score:Math.floor(value)});local.sort((a,b)=>b.score-a.score);
-  localStorage.setItem("localScores",JSON.stringify(local.slice(0,10)));
-  if(window.firebaseReady){
-    try{await setDoc(doc(window.db,"scores",window.crypto.randomUUID()),{name,score:Math.floor(value),createdAt:serverTimestamp()})}catch(e){console.warn(e)}
+
+  function rect(px, py, w, h, fill) {
+    x.fillStyle = fill;
+    x.fillRect(
+      Math.round(px),
+      Math.round(py),
+      w,
+      h
+    );
   }
-  loadScores();
-}
-async function loadScores(){
-  let rows=[];
-  if(window.firebaseReady){
-    try{
-      const q=query(collection(window.db,"scores"),orderBy("score","desc"),limit(10));
-      const snap=await getDocs(q);snap.forEach(d=>rows.push(d.data()));
-    }catch(e){console.warn(e)}
+
+  function rounded(px, py, w, h, r, fill) {
+    x.fillStyle = fill;
+    x.beginPath();
+    x.roundRect(px, py, w, h, r);
+    x.fill();
   }
-  if(!rows.length)rows=JSON.parse(localStorage.getItem("localScores")||"[]");
-  scoresEl.innerHTML=rows.length?rows.map((r,i)=>`<li><b>#${i+1}</b> — ${escapeHtml(r.name||"ضيف")} <span style="float:left">${fmt(r.score||0)}</span></li>`).join(""):"<li>لا توجد نتائج بعد.</li>";
-}
-function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-draw();loadScores();initFirebase();
+
+  function pixelDino() {
+    const p = player;
+    const ox = p.x;
+    const oy = p.y;
+    const phase = p.on ? Math.floor(p.frame / 5) % 2 : 0;
+
+    const g = x.createLinearGradient(
+      ox,
+      oy,
+      ox + 90,
+      oy + 85
+    );
+
+    g.addColorStop(0, '#c99568');
+    g.addColorStop(.42, '#9b6244');
+    g.addColorStop(1, '#53382d');
+
+    const belly = x.createLinearGradient(
+      ox + 20,
+      oy + 20,
+      ox + 55,
+      oy + 80
+    );
+
+    belly.addColorStop(0, '#d9ae7d');
+    belly.addColorStop(1, '#8b563c');
+
+    x.save();
+    x.translate(ox, oy);
+
+    // الجسم والذيل
+    x.beginPath();
+    x.moveTo(28, 31);
+    x.quadraticCurveTo(8, 18, -5, 28);
+    x.quadraticCurveTo(10, 43, 29, 47);
+    x.lineTo(43, 60);
+    x.lineTo(65, 62);
+    x.lineTo(72, 38);
+    x.lineTo(62, 19);
+    x.lineTo(45, 16);
+    x.closePath();
+    x.fillStyle = g;
+    x.fill();
+
+    // الرقبة والرأس
+    x.beginPath();
+    x.moveTo(43, 31);
+    x.lineTo(43, 9);
+    x.quadraticCurveTo(47, 0, 61, 3);
+    x.lineTo(77, 7);
+    x.lineTo(84, 17);
+    x.lineTo(79, 31);
+    x.lineTo(61, 35);
+    x.lineTo(57, 48);
+    x.closePath();
+    x.fillStyle = g;
+    x.fill();
+
+    // الفم
+    x.beginPath();
+    x.moveTo(68, 12);
+    x.lineTo(91, 15);
+    x.lineTo(96, 24);
+    x.lineTo(89, 31);
+    x.lineTo(66, 29);
+    x.closePath();
+    x.fillStyle = g;
+    x.fill();
+
+    x.beginPath();
+    x.moveTo(70, 29);
+    x.lineTo(91, 29);
+    x.lineTo(87, 36);
+    x.lineTo(68, 34);
+    x.closePath();
+    x.fillStyle = '#4a3028';
+    x.fill();
+
+    // البطن
+    x.beginPath();
+    x.moveTo(37, 35);
+    x.quadraticCurveTo(49, 40, 59, 38);
+    x.lineTo(57, 64);
+    x.quadraticCurveTo(45, 75, 30, 65);
+    x.closePath();
+    x.fillStyle = belly;
+    x.fill();
+
+    // الذراعان
+    x.strokeStyle = '#6c4534';
+    x.lineWidth = 6;
+    x.lineCap = 'round';
+    x.beginPath();
+    x.moveTo(47, 43);
+    x.lineTo(57, 53);
+    x.lineTo(53, 60);
+    x.moveTo(52, 52);
+    x.lineTo(61, 54);
+    x.stroke();
+
+    // الرجلان
+    x.strokeStyle = '#5a3b2e';
+    x.lineWidth = 9;
+    x.beginPath();
+    x.moveTo(34, 62);
+    x.lineTo(29 + (phase ? 5 : 0), 78);
+    x.lineTo(20 + (phase ? 5 : 0), 82);
+    x.moveTo(53, 62);
+    x.lineTo(57 - (phase ? 5 : 0), 78);
+    x.lineTo(69 - (phase ? 5 : 0), 82);
+    x.stroke();
+
+    // القدم
+    x.strokeStyle = '#30241f';
+    x.lineWidth = 5;
+    x.beginPath();
+    x.moveTo(18 + (phase ? 5 : 0), 82);
+    x.lineTo(31 + (phase ? 5 : 0), 82);
+    x.moveTo(56 - (phase ? 5 : 0), 82);
+    x.lineTo(72 - (phase ? 5 : 0), 82);
+    x.stroke();
+
+    // العين
+    x.fillStyle = '#201713';
+    x.beginPath();
+    x.arc(72, 13, 3.2, 0, Math.PI * 2);
+    x.fill();
+
+    x.fillStyle = '#f4d7a0';
+    x.beginPath();
+    x.arc(73, 12, 1, 0, Math.PI * 2);
+    x.fill();
+
+    // فتحة الأنف
+    x.fillStyle = '#2e1d17';
+    x.beginPath();
+    x.arc(88, 22, 1.6, 0, Math.PI * 2);
+    x.fill();
+
+    // الأسنان
+    x.fillStyle = '#f8e5c0';
+
+    for (let i = 0; i < 4; i++) {
+      x.fillRect(73 + i * 4, 29, 2, 4);
+    }
+
+    // لمعان الجلد
+    x.strokeStyle = '#d4a078';
+    x.lineWidth = 2;
+    x.beginPath();
+    x.moveTo(18, 36);
+    x.lineTo(29, 40);
+    x.moveTo(46, 20);
+    x.lineTo(52, 12);
+    x.moveTo(39, 49);
+    x.lineTo(45, 53);
+    x.stroke();
+
+    x.restore();
+  }
+
+  function cactus(o) {
+    const ox = o.x;
+    const base = ground;
+    const h = o.h;
+    const s = o.s || 1;
+    const stemW = 22 * s;
+
+    const grad = x.createLinearGradient(
+      ox - 12 * s,
+      base - h,
+      ox + 48 * s,
+      base
+    );
+
+    grad.addColorStop(0, '#9caf78');
+    grad.addColorStop(.28, '#557448');
+    grad.addColorStop(.7, '#315238');
+    grad.addColorStop(1, '#203a2a');
+
+    rounded(
+      ox + 18 * s,
+      base - h,
+      stemW,
+      h,
+      stemW / 2,
+      grad
+    );
+
+    rounded(
+      ox + 5 * s,
+      base - h * .58,
+      13 * s,
+      h * .3,
+      6 * s,
+      grad
+    );
+
+    rounded(
+      ox - 2 * s,
+      base - h * .58,
+      20 * s,
+      12 * s,
+      6 * s,
+      grad
+    );
+
+    rounded(
+      ox + 39 * s,
+      base - h * .42,
+      13 * s,
+      h * .28,
+      6 * s,
+      grad
+    );
+
+    rounded(
+      ox + 39 * s,
+      base - h * .42,
+      20 * s,
+      12 * s,
+      6 * s,
+      grad
+    );
+
+    for (let k = 0; k < 5; k++) {
+      x.strokeStyle = 'rgba(210,224,166,.48)';
+      x.lineWidth = 1.2 * s;
+      x.beginPath();
+      x.moveTo(
+        ox + (21 + k * 2) * s,
+        base - h + 10
+      );
+      x.lineTo(
+        ox + (19 + k * 2) * s,
+        base - 10
+      );
+      x.stroke();
+    }
+
+    x.strokeStyle = '#c0cc91';
+    x.lineWidth = 1.5 * s;
+    x.beginPath();
+    x.moveTo(
+      ox + 25 * s,
+      base - h + 8
+    );
+    x.lineTo(
+      ox + 25 * s,
+      base - 8
+    );
+    x.moveTo(
+      ox + 12 * s,
+      base - h * .55
+    );
+    x.lineTo(
+      ox + 12 * s,
+      base - h * .3
+    );
+    x.moveTo(
+      ox + 45 * s,
+      base - h * .38
+    );
+    x.lineTo(
+      ox + 45 * s,
+      base - h * .18
+    );
+    x.stroke();
+
+    for (let k = 0; k < 9; k++) {
+      const yy = base - h + 12 + k * (h - 20) / 9;
+      x.fillStyle = '#d5d9a2';
+      x.fillRect(
+        ox + (k % 2 ? 15 : 33) * s,
+        yy,
+        2 * s,
+        2 * s
+      );
+    }
+  }
+
+  function pyramid(px, py, w, h) {
+    const left = px - w / 2;
+    const right = px + w / 2;
+    const top = py - h;
+
+    const g = x.createLinearGradient(
+      px - w / 2,
+      top,
+      px + w / 2,
+      py
+    );
+
+    g.addColorStop(0, '#f1d39a');
+    g.addColorStop(1, '#b67d4d');
+
+    x.fillStyle = g;
+    x.beginPath();
+    x.moveTo(px, top);
+    x.lineTo(right, py);
+    x.lineTo(left, py);
+    x.closePath();
+    x.fill();
+
+    x.fillStyle = '#9b6845';
+    x.beginPath();
+    x.moveTo(px, top);
+    x.lineTo(right, py);
+    x.lineTo(px + 8, py);
+    x.closePath();
+    x.fill();
+
+    x.strokeStyle = 'rgba(112,73,44,.38)';
+    x.lineWidth = 2;
+
+    for (let yy = py - 12; yy > top + 8; yy -= 13) {
+      const t = (py - yy) / h;
+      const half = (w / 2) * (1 - t);
+
+      x.beginPath();
+      x.moveTo(px - half, yy);
+      x.lineTo(px + half, yy);
+      x.stroke();
+    }
+
+    x.strokeStyle = 'rgba(255,235,184,.35)';
+    x.beginPath();
+    x.moveTo(px, top);
+    x.lineTo(left, py);
+    x.stroke();
+  }
+
+  function cloud(cl) {
+    x.strokeStyle = '#eadfce';
+    x.lineWidth = 3;
+    x.beginPath();
+    x.moveTo(cl.x, cl.y + 20);
+    x.lineTo(cl.x + cl.w, cl.y + 20);
+    x.moveTo(cl.x + 8, cl.y + 20);
+    x.quadraticCurveTo(
+      cl.x + 15,
+      cl.y - 5,
+      cl.x + 35,
+      cl.y + 5
+    );
+    x.quadraticCurveTo(
+      cl.x + 60,
+      cl.y - 18,
+      cl.x + 78,
+      cl.y + 7
+    );
+    x.quadraticCurveTo(
+      cl.x + cl.w - 5,
+      cl.y + 3,
+      cl.x + cl.w,
+      cl.y + 20
+    );
+    x.stroke();
+  }
+
+  function mountain(px, py, w, h, fill) {
+    x.fillStyle = fill;
+    x.beginPath();
+    x.moveTo(px - w / 2, py);
+    x.lineTo(px - w * .18, py - h * .65);
+    x.lineTo(px, py - h);
+    x.lineTo(px + w * .2, py - h * .55);
+    x.lineTo(px + w / 2, py);
+    x.closePath();
+    x.fill();
+  }
+
+  function draw() {
+    const sky = x.createLinearGradient(0, 0, 0, H);
+
+    sky.addColorStop(0, '#86b9d9');
+    sky.addColorStop(.62, '#e8c99b');
+    sky.addColorStop(1, '#d6a56d');
+
+    x.fillStyle = sky;
+    x.fillRect(0, 0, W, H);
+
+    const glow = x.createRadialGradient(
+      sunX,
+      70,
+      5,
+      sunX,
+      70,
+      100
+    );
+
+    glow.addColorStop(0, '#fff6bf');
+    glow.addColorStop(1, '#fff6bf00');
+
+    x.fillStyle = glow;
+    x.fillRect(sunX - 110, -40, 220, 220);
+
+    x.fillStyle = '#fff0ae';
+    x.beginPath();
+    x.arc(sunX, 70, 34, 0, Math.PI * 2);
+    x.fill();
+
+    clouds.forEach(cloud);
+
+    mountain(160, 330, 360, 160, '#b37e59');
+    mountain(440, 335, 430, 175, '#c18a60');
+    mountain(790, 330, 450, 190, '#9f6d50');
+    mountain(1080, 335, 350, 170, '#b77e58');
+
+    pyramid(820, 335, 210, 145);
+    pyramid(1010, 350, 150, 105);
+    pyramid(650, 355, 115, 78);
+
+    const sand = x.createLinearGradient(0, 330, 0, H);
+
+    sand.addColorStop(0, '#efd09a');
+    sand.addColorStop(.45, '#d8a66c');
+    sand.addColorStop(1, '#a96f47');
+
+    x.fillStyle = sand;
+    x.fillRect(0, 330, W, H);
+
+    for (let k = 0; k < 7; k++) {
+      x.strokeStyle = 'rgba(120,78,47,.18)';
+      x.lineWidth = 2;
+      x.beginPath();
+      x.moveTo(0, 350 + k * 24);
+      x.quadraticCurveTo(
+        W * .35,
+        340 + k * 24,
+        W,
+        360 + k * 24
+      );
+      x.stroke();
+    }
+
+    x.strokeStyle = '#8e6045';
+    x.lineWidth = 3;
+    x.beginPath();
+    x.moveTo(0, ground);
+    x.lineTo(W, ground);
+    x.stroke();
+
+    for (let i = 0; i < W; i += 55) {
+      x.fillStyle = i % 110 === 0 ? '#9b6e4c' : '#a97a53';
+      x.fillRect(i, ground + 13, 5, 3);
+    }
+
+    for (let i = 0; i < 28; i++) {
+      const px = (i * 83 + tickOffset()) % W;
+      const py = ground + randStatic(i);
+
+      x.fillStyle = i % 3 ? '#8d6042' : '#6f4a35';
+      x.beginPath();
+      x.ellipse(
+        px,
+        py,
+        randStatic(i + 4),
+        2,
+        0,
+        0,
+        Math.PI * 2
+      );
+      x.fill();
+    }
+
+    obs
+      .slice()
+      .sort((a, b) => b.x - a.x)
+      .forEach(cactus);
+
+    pixelDino();
+
+    dust.forEach(d => {
+      x.globalAlpha = d.life;
+      rect(d.x, d.y, 4, 3, '#8f6849');
+      x.globalAlpha = 1;
+    });
+  }
+
+  let visualT = 0;
+
+  function tickOffset() {
+    return (visualT * 35) % W;
+  }
+
+  function randStatic(i) {
+    return 10 + (i * 37) % 75;
+  }
+
+  function update(dt) {
+    visualT += dt;
+    score += dt * 10;
+    speed = Math.min(900, speed + dt * 5);
+
+    spawn -= dt;
+
+    player.frame++;
+
+    if (spawn <= 0) {
+      const h = 58 + Math.random() * 48;
+
+      obs.push({
+        x: W + 50,
+        h,
+        w: 56,
+        s: .9 + Math.random() * .3
+      });
+
+      spawn = 1.35 + Math.random() * 1.35;
+    }
+
+    player.vy += 2400 * dt;
+    player.y += player.vy * dt;
+
+    if (player.y >= ground - player.h) {
+      player.y = ground - player.h;
+      player.vy = 0;
+      player.on = true;
+    }
+
+    obs.forEach(o => {
+      o.x -= speed * dt;
+    });
+
+    obs = obs.filter(o => o.x > -120);
+
+    for (const o of obs) {
+      if (
+        o.x < player.x + player.w - 10 &&
+        o.x + o.w > player.x + 10 &&
+        player.y + player.h > ground - o.h + 8
+      ) {
+        end();
+        return;
+      }
+    }
+
+    clouds.forEach(cl => {
+      cl.x -= speed * dt * .08;
+
+      if (cl.x + cl.w < 0) {
+        cl.x = W + Math.random() * 200;
+      }
+    });
+
+    hud();
+  }
+
+  function loop(now) {
+    if (state !== 'playing') return;
+
+    const dt = Math.min(.035, (now - last) / 1000);
+
+    last = now;
+
+    update(dt);
+    draw();
+
+    if (state === 'playing') {
+      requestAnimationFrame(loop);
+    }
+  }
+
+  $('play').onclick = start;
+  $('again').onclick = start;
+  $('reset').onclick = start;
+  $('jump').onclick = jump;
+
+  c.addEventListener('pointerdown', jump);
+
+  addEventListener('keydown', e => {
+    if (
+      e.code === 'Space' ||
+      e.code === 'ArrowUp'
+    ) {
+      e.preventDefault();
+      jump();
+    }
+
+    if (e.key.toLowerCase() === 'r') {
+      start();
+    }
+  });
+
+  reset();
+})();
 </script>
+
 </body>
 </html>
