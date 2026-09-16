@@ -1,236 +1,372 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>Dino Desert Runner</title>
+  <title>Dino Desert Runner</title>
 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9243381326991051"
-     crossorigin="anonymous"></script>
+  <!-- كود التحقق من Google AdSense -->
+  <script async
+    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9243381326991051"
+    crossorigin="anonymous"></script>
 
-<style>
-* {
-  box-sizing: border-box;
-}
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-body {
-  margin: 0;
-  background: #f5f0e8;
-  font-family: Arial, sans-serif;
-  color: #3b3028;
-  display: flex;
-  justify-content: center;
-  min-height: 100vh;
-}
+    body {
+      margin: 0;
+      background: linear-gradient(#f4dfbd, #d9a66e);
+      color: #38261c;
+      font-family: Arial, sans-serif;
+    }
 
-main {
-  width: min(100%, 1200px);
-  padding: 16px;
-}
+    main {
+      width: min(100%, 1100px);
+      margin: auto;
+      padding: 15px;
+    }
 
-.top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  direction: ltr;
-  margin-bottom: 10px;
-}
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      direction: ltr;
+    }
 
-.title {
-  font-weight: 800;
-  font-size: 20px;
-}
+    .logo {
+      font-size: 21px;
+      font-weight: bold;
+    }
 
-.score {
-  font: 700 24px monospace;
-  letter-spacing: 1px;
-}
+    #score {
+      font: bold 22px monospace;
+    }
 
-.game {
-  position: relative;
-  overflow: hidden;
-  border-radius: 14px;
-  box-shadow: 0 8px 30px #5b402522;
-  background: #d9b27d;
-}
+    .game-box {
+      position: relative;
+      overflow: hidden;
+      border-radius: 16px;
+      background: #e7bd82;
+      box-shadow: 0 8px 25px #56351f33;
+    }
 
-.game canvas {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 16/7;
-  touch-action: manipulation;
-}
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 7;
+      touch-action: manipulation;
+    }
 
-.panel {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  background: #f8ecdccc;
-}
+    .panel {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: #fff1d4cc;
+      padding: 15px;
+    }
 
-.dialog {
-  text-align: center;
-  background: #fff7e8ee;
-  border: 1px solid #b99368;
-  border-radius: 16px;
-  padding: 24px;
-  box-shadow: 0 10px 35px #4b301c22;
-}
+    .hidden {
+      display: none !important;
+    }
 
-.dialog h1 {
-  font-size: 30px;
-  margin: 0 0 10px;
-}
+    .dialog {
+      width: min(100%, 390px);
+      text-align: center;
+      background: #fffaf0;
+      border: 2px solid #9c7048;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 8px 25px #422b1c33;
+    }
 
-.dialog p {
-  font-size: 15px;
-  margin: 0 0 18px;
-}
+    .dialog h1 {
+      margin-top: 0;
+    }
 
-.btn {
-  border: 1px solid #65472f;
-  background: #65472f;
-  color: #fff;
-  border-radius: 8px;
-  padding: 12px 22px;
-  font-weight: bold;
-  cursor: pointer;
-}
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #b58b60;
+      border-radius: 8px;
+      font-size: 16px;
+      margin: 8px 0 12px;
+      text-align: center;
+    }
 
-.btn:hover {
-  background: #805b3d;
-}
+    button {
+      border: 0;
+      border-radius: 8px;
+      background: #67452d;
+      color: white;
+      padding: 12px 20px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
 
-.controls {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin-top: 12px;
-}
+    button:hover {
+      background: #875d3d;
+    }
 
-.hint {
-  text-align: center;
-  color: #786858;
-  font-size: 13px;
-  margin-top: 10px;
-}
+    button:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
 
-.hidden {
-  display: none !important;
-}
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin: 12px 0;
+    }
 
-/* مساحة إعلان أسفل اللعبة */
-.ad-container {
-  min-height: 90px;
-  margin: 18px auto;
-  text-align: center;
-}
-</style>
+    .hint {
+      text-align: center;
+      color: #6c4c35;
+      font-size: 14px;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 1fr 330px;
+      gap: 15px;
+      margin-top: 18px;
+    }
+
+    .card {
+      background: #fff8eb;
+      border: 1px solid #b99368;
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 20px;
+    }
+
+    #leaderboard {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    #leaderboard li {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px 0;
+      border-bottom: 1px solid #ead5b8;
+    }
+
+    #leaderboard li:last-child {
+      border-bottom: 0;
+    }
+
+    .rank {
+      font-weight: bold;
+      color: #8a5a32;
+    }
+
+    .message {
+      font-size: 14px;
+      color: #76563d;
+      min-height: 20px;
+    }
+
+    .ad-area {
+      min-height: 90px;
+      text-align: center;
+      margin: 18px 0;
+    }
+
+    @media (max-width: 750px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      #score {
+        font-size: 19px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 <main>
 
-  <div class="top">
-    <div class="title">🦖 Dino Desert Runner</div>
-    <div class="score" id="score">HI 000000 000000</div>
-  </div>
+  <header>
+    <div class="logo">🦖 Dino Desert Runner</div>
+    <div id="score">HI 000000 000000</div>
+  </header>
 
-  <div class="game">
-    <canvas
-      id="canvas"
-      width="1200"
-      height="525"
-      aria-label="لعبة ديناصور في صحراء واقعية">
-    </canvas>
+  <section class="game-box">
+    <canvas id="canvas" width="1200" height="525"></canvas>
 
-    <div class="panel" id="start">
+    <div class="panel" id="startPanel">
       <div class="dialog">
         <h1>🦖 Dino Desert</h1>
-        <p>اركض في الصحراء وتفادى الصبار والصخور</p>
-        <button class="btn" id="play">ابدأ اللعب</button>
+        <p>اكتب اسمك وابدأ اللعب</p>
+
+        <input
+          id="playerName"
+          maxlength="20"
+          placeholder="اسم اللاعب"
+          autocomplete="off">
+
+        <button id="startButton">ابدأ اللعب</button>
+
+        <p class="message" id="startMessage"></p>
       </div>
     </div>
 
-    <div class="panel hidden" id="over">
+    <div class="panel hidden" id="gameOverPanel">
       <div class="dialog">
         <h1>انتهت اللعبة</h1>
-        <p id="result"></p>
-        <button class="btn" id="again">إعادة اللعب</button>
+        <p id="finalScore"></p>
+
+        <button id="sendScoreButton">
+          حفظ النتيجة عالميًا
+        </button>
+
+        <button id="restartButton">
+          إعادة اللعب
+        </button>
+
+        <p class="message" id="saveMessage"></p>
       </div>
     </div>
-  </div>
-
-  <!-- =========================================
-       إعلان أسفل اللعبة
-       بعد موافقة AdSense، ضع كود الوحدة
-       الإعلانية هنا إذا أعطاك Google كودًا
-       ========================================= -->
-
-  <div class="ad-container">
-
-    <!-- الصق كود وحدة الإعلان هنا بعد الموافقة -->
-
-    <!-- مثال فقط:
-    <ins class="adsbygoogle"
-         style="display:block"
-         data-ad-client="ca-pub-XXXXXXXXXXXX"
-         data-ad-slot="XXXXXXXXXX"
-         data-ad-format="auto"
-         data-full-width-responsive="true"></ins>
-
-    <script>
-      (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
-    -->
-
-  </div>
+  </section>
 
   <div class="controls">
-    <button class="btn" id="jump">⬆ قفز</button>
-    <button class="btn" id="reset">↻ إعادة</button>
+    <button id="jumpButton">⬆ قفز</button>
+    <button id="resetButton">↻ إعادة</button>
   </div>
 
-  <div class="hint">
-    Space / ↑ للقفز — R لإعادة اللعب — اضغط على الشاشة في الجوال
+  <p class="hint">
+    اضغط Space أو ↑ للقفز — يمكنك الضغط على الشاشة من الهاتف
+  </p>
+
+  <!-- مكان الإعلان بعد موافقة AdSense -->
+  <div class="ad-area">
+    <!--
+    بعد موافقة Google، أنشئ وحدة إعلانية والصق كودها هنا.
+    لا تستخدم كود إعلان تجريبي.
+    -->
   </div>
 
+  <section class="layout">
+
+    <div class="card">
+      <h2>🏜️ عن اللعبة</h2>
+      <p>
+        اركض في الصحراء وتفادى الصبار. كلما استمريت أكثر
+        زادت سرعتك وحصلت على نقاط أكثر.
+      </p>
+      <p>
+        نتيجتك يمكن إرسالها إلى جدول اللاعبين العالمي.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>🏆 أفضل اللاعبين</h2>
+      <ol id="leaderboard">
+        <li>جاري تحميل النتائج...</li>
+      </ol>
+      <p class="message" id="leaderboardMessage"></p>
+    </div>
+
+  </section>
 </main>
 
-<script>
-(() => {
-  const c = document.getElementById('canvas');
-  const x = c.getContext('2d');
+<script type="module">
+  import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-  const W = c.width;
-  const H = c.height;
+  import {
+    getAuth,
+    signInAnonymously
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+  import {
+    getFirestore,
+    collection,
+    addDoc,
+    query,
+    orderBy,
+    limit,
+    getDocs,
+    serverTimestamp
+  } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  /* إعداد Firebase الخاص بك */
+  const firebaseConfig = {
+    apiKey: "AIzaSyAsVD5HQmdRUv22JJi1tEVeNN-LV90lH2I",
+    authDomain: "dino-desert-runner.firebaseapp.com",
+    projectId: "dino-desert-runner",
+    storageBucket: "dino-desert-runner.firebasestorage.app",
+    messagingSenderId: "710375277324",
+    appId: "1:710375277324:web:dc6da816b9b2ab2aebff29",
+    measurementId: "G-7HX4HSG5Y3"
+  };
+
+  const firebaseApp = initializeApp(firebaseConfig);
+  const auth = getAuth(firebaseApp);
+  const db = getFirestore(firebaseApp);
+
+  let currentUser = null;
+
+  try {
+    const loginResult = await signInAnonymously(auth);
+    currentUser = loginResult.user;
+  } catch (error) {
+    console.error("Firebase login error:", error);
+    document.getElementById("leaderboardMessage").textContent =
+      "تعذر الاتصال بخدمة النتائج.";
+  }
+
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
+
+  const W = canvas.width;
+  const H = canvas.height;
   const ground = 405;
 
-  let state = 'ready';
+  let state = "ready";
   let score = 0;
-  let best = 0;
+  let best = Number(localStorage.getItem("dinoBest") || 0);
   let speed = 520;
-  let last = 0;
-  let spawn = 1.5;
+  let lastTime = 0;
+  let spawnTimer = 1.4;
+  let visualTime = 0;
   let player;
-  let obs = [];
+  let obstacles = [];
   let clouds = [];
-  let dust = [];
-  let sunX = 980;
 
   const $ = id => document.getElementById(id);
 
-  const rand = (a, b) => a + Math.random() * (b - a);
+  function random(a, b) {
+    return a + Math.random() * (b - a);
+  }
 
-  function reset() {
+  function resetGame() {
     score = 0;
     speed = 520;
-    spawn = 1.5;
-    obs = [];
-    dust = [];
+    spawnTimer = 1.4;
+    visualTime = 0;
+    obstacles = [];
 
     clouds = [
       { x: 80, y: 105, w: 90 },
@@ -244,585 +380,381 @@ main {
       w: 58,
       h: 82,
       vy: 0,
-      on: true,
+      onGround: true,
       frame: 0
     };
 
-    hud();
+    updateScore();
     draw();
   }
 
-  function hud() {
-    $('score').textContent =
-      'HI ' +
-      String(best).padStart(6, '0') +
-      ' ' +
-      String(Math.floor(score)).padStart(6, '0');
+  function updateScore() {
+    $("score").textContent =
+      "HI " +
+      String(best).padStart(6, "0") +
+      " " +
+      String(Math.floor(score)).padStart(6, "0");
   }
 
-  function start() {
-    reset();
-    state = 'playing';
+  function startGame() {
+    const name = $("playerName").value.trim();
 
-    $('start').classList.add('hidden');
-    $('over').classList.add('hidden');
-
-    last = performance.now();
-    requestAnimationFrame(loop);
-  }
-
-  function end() {
-    state = 'over';
-    best = Math.max(best, Math.floor(score));
-
-    $('result').textContent =
-      'النقاط: ' +
-      Math.floor(score) +
-      ' — الرقم القياسي: ' +
-      best;
-
-    $('over').classList.remove('hidden');
-  }
-
-  function jump() {
-    if (state === 'ready' || state === 'over') {
-      start();
+    if (!name) {
+      $("startMessage").textContent = "اكتب اسم اللاعب أولًا.";
       return;
     }
 
-    if (state === 'playing' && player.on) {
+    resetGame();
+
+    state = "playing";
+    $("startPanel").classList.add("hidden");
+    $("gameOverPanel").classList.add("hidden");
+    $("saveMessage").textContent = "";
+
+    lastTime = performance.now();
+    requestAnimationFrame(gameLoop);
+  }
+
+  function endGame() {
+    state = "over";
+
+    best = Math.max(best, Math.floor(score));
+    localStorage.setItem("dinoBest", String(best));
+
+    $("finalScore").textContent =
+      "النقاط: " + Math.floor(score) +
+      " — الرقم القياسي: " + best;
+
+    $("gameOverPanel").classList.remove("hidden");
+    updateScore();
+  }
+
+  function jump() {
+    if (state === "ready") {
+      startGame();
+      return;
+    }
+
+    if (state === "over") {
+      startGame();
+      return;
+    }
+
+    if (state === "playing" && player.onGround) {
       player.vy = -920;
-      player.on = false;
+      player.onGround = false;
     }
   }
 
-  function rect(px, py, w, h, fill) {
-    x.fillStyle = fill;
-    x.fillRect(
-      Math.round(px),
-      Math.round(py),
-      w,
-      h
-    );
+  function drawRect(x, y, w, h, color) {
+    ctx.fillStyle = color;
+    ctx.fillRect(Math.round(x), Math.round(y), w, h);
   }
 
-  function rounded(px, py, w, h, r, fill) {
-    x.fillStyle = fill;
-    x.beginPath();
-    x.roundRect(px, py, w, h, r);
-    x.fill();
+  function roundedRect(x, y, w, h, r, color) {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.roundRect(x, y, w, h, r);
+    ctx.fill();
   }
 
-  function pixelDino() {
+  function drawDinosaur() {
     const p = player;
     const ox = p.x;
     const oy = p.y;
-    const phase = p.on ? Math.floor(p.frame / 5) % 2 : 0;
+    const phase = p.onGround
+      ? Math.floor(p.frame / 5) % 2
+      : 0;
 
-    const g = x.createLinearGradient(
-      ox,
-      oy,
-      ox + 90,
-      oy + 85
+    const skin = ctx.createLinearGradient(
+      ox, oy, ox + 90, oy + 85
     );
 
-    g.addColorStop(0, '#c99568');
-    g.addColorStop(.42, '#9b6244');
-    g.addColorStop(1, '#53382d');
+    skin.addColorStop(0, "#c99568");
+    skin.addColorStop(.45, "#9b6244");
+    skin.addColorStop(1, "#53382d");
 
-    const belly = x.createLinearGradient(
-      ox + 20,
-      oy + 20,
-      ox + 55,
-      oy + 80
-    );
+    ctx.save();
+    ctx.translate(ox, oy);
 
-    belly.addColorStop(0, '#d9ae7d');
-    belly.addColorStop(1, '#8b563c');
+    ctx.fillStyle = skin;
+    ctx.beginPath();
+    ctx.moveTo(28, 31);
+    ctx.quadraticCurveTo(8, 18, -5, 28);
+    ctx.quadraticCurveTo(10, 43, 29, 47);
+    ctx.lineTo(43, 60);
+    ctx.lineTo(65, 62);
+    ctx.lineTo(72, 38);
+    ctx.lineTo(62, 19);
+    ctx.lineTo(45, 16);
+    ctx.closePath();
+    ctx.fill();
 
-    x.save();
-    x.translate(ox, oy);
+    ctx.beginPath();
+    ctx.moveTo(43, 31);
+    ctx.lineTo(43, 9);
+    ctx.quadraticCurveTo(47, 0, 61, 3);
+    ctx.lineTo(77, 7);
+    ctx.lineTo(84, 17);
+    ctx.lineTo(79, 31);
+    ctx.lineTo(61, 35);
+    ctx.lineTo(57, 48);
+    ctx.closePath();
+    ctx.fill();
 
-    // الجسم والذيل
-    x.beginPath();
-    x.moveTo(28, 31);
-    x.quadraticCurveTo(8, 18, -5, 28);
-    x.quadraticCurveTo(10, 43, 29, 47);
-    x.lineTo(43, 60);
-    x.lineTo(65, 62);
-    x.lineTo(72, 38);
-    x.lineTo(62, 19);
-    x.lineTo(45, 16);
-    x.closePath();
-    x.fillStyle = g;
-    x.fill();
+    ctx.beginPath();
+    ctx.moveTo(68, 12);
+    ctx.lineTo(91, 15);
+    ctx.lineTo(96, 24);
+    ctx.lineTo(89, 31);
+    ctx.lineTo(66, 29);
+    ctx.closePath();
+    ctx.fill();
 
-    // الرقبة والرأس
-    x.beginPath();
-    x.moveTo(43, 31);
-    x.lineTo(43, 9);
-    x.quadraticCurveTo(47, 0, 61, 3);
-    x.lineTo(77, 7);
-    x.lineTo(84, 17);
-    x.lineTo(79, 31);
-    x.lineTo(61, 35);
-    x.lineTo(57, 48);
-    x.closePath();
-    x.fillStyle = g;
-    x.fill();
+    ctx.fillStyle = "#4a3028";
+    ctx.beginPath();
+    ctx.moveTo(70, 29);
+    ctx.lineTo(91, 29);
+    ctx.lineTo(87, 36);
+    ctx.lineTo(68, 34);
+    ctx.closePath();
+    ctx.fill();
 
-    // الفم
-    x.beginPath();
-    x.moveTo(68, 12);
-    x.lineTo(91, 15);
-    x.lineTo(96, 24);
-    x.lineTo(89, 31);
-    x.lineTo(66, 29);
-    x.closePath();
-    x.fillStyle = g;
-    x.fill();
+    ctx.fillStyle = "#d9ae7d";
+    ctx.beginPath();
+    ctx.moveTo(37, 35);
+    ctx.quadraticCurveTo(49, 40, 59, 38);
+    ctx.lineTo(57, 64);
+    ctx.quadraticCurveTo(45, 75, 30, 65);
+    ctx.closePath();
+    ctx.fill();
 
-    x.beginPath();
-    x.moveTo(70, 29);
-    x.lineTo(91, 29);
-    x.lineTo(87, 36);
-    x.lineTo(68, 34);
-    x.closePath();
-    x.fillStyle = '#4a3028';
-    x.fill();
+    ctx.strokeStyle = "#6c4534";
+    ctx.lineWidth = 6;
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    ctx.moveTo(47, 43);
+    ctx.lineTo(57, 53);
+    ctx.lineTo(53, 60);
+    ctx.moveTo(52, 52);
+    ctx.lineTo(61, 54);
+    ctx.stroke();
 
-    // البطن
-    x.beginPath();
-    x.moveTo(37, 35);
-    x.quadraticCurveTo(49, 40, 59, 38);
-    x.lineTo(57, 64);
-    x.quadraticCurveTo(45, 75, 30, 65);
-    x.closePath();
-    x.fillStyle = belly;
-    x.fill();
+    ctx.strokeStyle = "#5a3b2e";
+    ctx.lineWidth = 9;
+    ctx.beginPath();
+    ctx.moveTo(34, 62);
+    ctx.lineTo(29 + (phase ? 5 : 0), 78);
+    ctx.lineTo(20 + (phase ? 5 : 0), 82);
+    ctx.moveTo(53, 62);
+    ctx.lineTo(57 - (phase ? 5 : 0), 78);
+    ctx.lineTo(69 - (phase ? 5 : 0), 82);
+    ctx.stroke();
 
-    // الذراعان
-    x.strokeStyle = '#6c4534';
-    x.lineWidth = 6;
-    x.lineCap = 'round';
-    x.beginPath();
-    x.moveTo(47, 43);
-    x.lineTo(57, 53);
-    x.lineTo(53, 60);
-    x.moveTo(52, 52);
-    x.lineTo(61, 54);
-    x.stroke();
+    ctx.strokeStyle = "#30241f";
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(18 + (phase ? 5 : 0), 82);
+    ctx.lineTo(31 + (phase ? 5 : 0), 82);
+    ctx.moveTo(56 - (phase ? 5 : 0), 82);
+    ctx.lineTo(72 - (phase ? 5 : 0), 82);
+    ctx.stroke();
 
-    // الرجلان
-    x.strokeStyle = '#5a3b2e';
-    x.lineWidth = 9;
-    x.beginPath();
-    x.moveTo(34, 62);
-    x.lineTo(29 + (phase ? 5 : 0), 78);
-    x.lineTo(20 + (phase ? 5 : 0), 82);
-    x.moveTo(53, 62);
-    x.lineTo(57 - (phase ? 5 : 0), 78);
-    x.lineTo(69 - (phase ? 5 : 0), 82);
-    x.stroke();
+    ctx.fillStyle = "#201713";
+    ctx.beginPath();
+    ctx.arc(72, 13, 3.2, 0, Math.PI * 2);
+    ctx.fill();
 
-    // القدم
-    x.strokeStyle = '#30241f';
-    x.lineWidth = 5;
-    x.beginPath();
-    x.moveTo(18 + (phase ? 5 : 0), 82);
-    x.lineTo(31 + (phase ? 5 : 0), 82);
-    x.moveTo(56 - (phase ? 5 : 0), 82);
-    x.lineTo(72 - (phase ? 5 : 0), 82);
-    x.stroke();
+    ctx.fillStyle = "#2e1d17";
+    ctx.beginPath();
+    ctx.arc(88, 22, 1.6, 0, Math.PI * 2);
+    ctx.fill();
 
-    // العين
-    x.fillStyle = '#201713';
-    x.beginPath();
-    x.arc(72, 13, 3.2, 0, Math.PI * 2);
-    x.fill();
-
-    x.fillStyle = '#f4d7a0';
-    x.beginPath();
-    x.arc(73, 12, 1, 0, Math.PI * 2);
-    x.fill();
-
-    // فتحة الأنف
-    x.fillStyle = '#2e1d17';
-    x.beginPath();
-    x.arc(88, 22, 1.6, 0, Math.PI * 2);
-    x.fill();
-
-    // الأسنان
-    x.fillStyle = '#f8e5c0';
-
+    ctx.fillStyle = "#f8e5c0";
     for (let i = 0; i < 4; i++) {
-      x.fillRect(73 + i * 4, 29, 2, 4);
+      ctx.fillRect(73 + i * 4, 29, 2, 4);
     }
 
-    // لمعان الجلد
-    x.strokeStyle = '#d4a078';
-    x.lineWidth = 2;
-    x.beginPath();
-    x.moveTo(18, 36);
-    x.lineTo(29, 40);
-    x.moveTo(46, 20);
-    x.lineTo(52, 12);
-    x.moveTo(39, 49);
-    x.lineTo(45, 53);
-    x.stroke();
-
-    x.restore();
+    ctx.restore();
   }
 
-  function cactus(o) {
+  function drawCactus(o) {
     const ox = o.x;
     const base = ground;
     const h = o.h;
-    const s = o.s || 1;
-    const stemW = 22 * s;
+    const s = o.s;
+    const width = 22 * s;
 
-    const grad = x.createLinearGradient(
-      ox - 12 * s,
-      base - h,
-      ox + 48 * s,
-      base
+    const gradient = ctx.createLinearGradient(
+      ox, base - h, ox + 50, base
     );
 
-    grad.addColorStop(0, '#9caf78');
-    grad.addColorStop(.28, '#557448');
-    grad.addColorStop(.7, '#315238');
-    grad.addColorStop(1, '#203a2a');
+    gradient.addColorStop(0, "#9caf78");
+    gradient.addColorStop(.4, "#557448");
+    gradient.addColorStop(1, "#203a2a");
 
-    rounded(
+    roundedRect(
       ox + 18 * s,
       base - h,
-      stemW,
+      width,
       h,
-      stemW / 2,
-      grad
+      width / 2,
+      gradient
     );
 
-    rounded(
+    roundedRect(
+      ox + 3 * s,
+      base - h * .58,
+      20 * s,
+      12 * s,
+      6 * s,
+      gradient
+    );
+
+    roundedRect(
       ox + 5 * s,
       base - h * .58,
       13 * s,
       h * .3,
       6 * s,
-      grad
+      gradient
     );
 
-    rounded(
-      ox - 2 * s,
-      base - h * .58,
+    roundedRect(
+      ox + 39 * s,
+      base - h * .42,
       20 * s,
       12 * s,
       6 * s,
-      grad
+      gradient
     );
 
-    rounded(
+    roundedRect(
       ox + 39 * s,
       base - h * .42,
       13 * s,
       h * .28,
       6 * s,
-      grad
+      gradient
     );
-
-    rounded(
-      ox + 39 * s,
-      base - h * .42,
-      20 * s,
-      12 * s,
-      6 * s,
-      grad
-    );
-
-    for (let k = 0; k < 5; k++) {
-      x.strokeStyle = 'rgba(210,224,166,.48)';
-      x.lineWidth = 1.2 * s;
-      x.beginPath();
-      x.moveTo(
-        ox + (21 + k * 2) * s,
-        base - h + 10
-      );
-      x.lineTo(
-        ox + (19 + k * 2) * s,
-        base - 10
-      );
-      x.stroke();
-    }
-
-    x.strokeStyle = '#c0cc91';
-    x.lineWidth = 1.5 * s;
-    x.beginPath();
-    x.moveTo(
-      ox + 25 * s,
-      base - h + 8
-    );
-    x.lineTo(
-      ox + 25 * s,
-      base - 8
-    );
-    x.moveTo(
-      ox + 12 * s,
-      base - h * .55
-    );
-    x.lineTo(
-      ox + 12 * s,
-      base - h * .3
-    );
-    x.moveTo(
-      ox + 45 * s,
-      base - h * .38
-    );
-    x.lineTo(
-      ox + 45 * s,
-      base - h * .18
-    );
-    x.stroke();
-
-    for (let k = 0; k < 9; k++) {
-      const yy = base - h + 12 + k * (h - 20) / 9;
-      x.fillStyle = '#d5d9a2';
-      x.fillRect(
-        ox + (k % 2 ? 15 : 33) * s,
-        yy,
-        2 * s,
-        2 * s
-      );
-    }
   }
 
-  function pyramid(px, py, w, h) {
+  function drawCloud(cloud) {
+    ctx.strokeStyle = "#eadfce";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(cloud.x, cloud.y + 20);
+    ctx.lineTo(cloud.x + cloud.w, cloud.y + 20);
+    ctx.moveTo(cloud.x + 8, cloud.y + 20);
+    ctx.quadraticCurveTo(
+      cloud.x + 15, cloud.y - 5,
+      cloud.x + 35, cloud.y + 5
+    );
+    ctx.quadraticCurveTo(
+      cloud.x + 60, cloud.y - 18,
+      cloud.x + 78, cloud.y + 7
+    );
+    ctx.quadraticCurveTo(
+      cloud.x + cloud.w - 5,
+      cloud.y + 3,
+      cloud.x + cloud.w,
+      cloud.y + 20
+    );
+    ctx.stroke();
+  }
+
+  function drawPyramid(px, py, w, h) {
     const left = px - w / 2;
     const right = px + w / 2;
     const top = py - h;
 
-    const g = x.createLinearGradient(
-      px - w / 2,
-      top,
-      px + w / 2,
-      py
+    const gradient = ctx.createLinearGradient(
+      left, top, right, py
     );
 
-    g.addColorStop(0, '#f1d39a');
-    g.addColorStop(1, '#b67d4d');
+    gradient.addColorStop(0, "#f1d39a");
+    gradient.addColorStop(1, "#b67d4d");
 
-    x.fillStyle = g;
-    x.beginPath();
-    x.moveTo(px, top);
-    x.lineTo(right, py);
-    x.lineTo(left, py);
-    x.closePath();
-    x.fill();
+    ctx.fillStyle = gradient;
+    ctx.beginPath();
+    ctx.moveTo(px, top);
+    ctx.lineTo(right, py);
+    ctx.lineTo(left, py);
+    ctx.closePath();
+    ctx.fill();
 
-    x.fillStyle = '#9b6845';
-    x.beginPath();
-    x.moveTo(px, top);
-    x.lineTo(right, py);
-    x.lineTo(px + 8, py);
-    x.closePath();
-    x.fill();
-
-    x.strokeStyle = 'rgba(112,73,44,.38)';
-    x.lineWidth = 2;
-
-    for (let yy = py - 12; yy > top + 8; yy -= 13) {
-      const t = (py - yy) / h;
-      const half = (w / 2) * (1 - t);
-
-      x.beginPath();
-      x.moveTo(px - half, yy);
-      x.lineTo(px + half, yy);
-      x.stroke();
-    }
-
-    x.strokeStyle = 'rgba(255,235,184,.35)';
-    x.beginPath();
-    x.moveTo(px, top);
-    x.lineTo(left, py);
-    x.stroke();
-  }
-
-  function cloud(cl) {
-    x.strokeStyle = '#eadfce';
-    x.lineWidth = 3;
-    x.beginPath();
-    x.moveTo(cl.x, cl.y + 20);
-    x.lineTo(cl.x + cl.w, cl.y + 20);
-    x.moveTo(cl.x + 8, cl.y + 20);
-    x.quadraticCurveTo(
-      cl.x + 15,
-      cl.y - 5,
-      cl.x + 35,
-      cl.y + 5
-    );
-    x.quadraticCurveTo(
-      cl.x + 60,
-      cl.y - 18,
-      cl.x + 78,
-      cl.y + 7
-    );
-    x.quadraticCurveTo(
-      cl.x + cl.w - 5,
-      cl.y + 3,
-      cl.x + cl.w,
-      cl.y + 20
-    );
-    x.stroke();
-  }
-
-  function mountain(px, py, w, h, fill) {
-    x.fillStyle = fill;
-    x.beginPath();
-    x.moveTo(px - w / 2, py);
-    x.lineTo(px - w * .18, py - h * .65);
-    x.lineTo(px, py - h);
-    x.lineTo(px + w * .2, py - h * .55);
-    x.lineTo(px + w / 2, py);
-    x.closePath();
-    x.fill();
+    ctx.fillStyle = "#9b6845";
+    ctx.beginPath();
+    ctx.moveTo(px, top);
+    ctx.lineTo(right, py);
+    ctx.lineTo(px + 8, py);
+    ctx.closePath();
+    ctx.fill();
   }
 
   function draw() {
-    const sky = x.createLinearGradient(0, 0, 0, H);
+    const sky = ctx.createLinearGradient(0, 0, 0, H);
+    sky.addColorStop(0, "#86b9d9");
+    sky.addColorStop(.62, "#e8c99b");
+    sky.addColorStop(1, "#d6a56d");
 
-    sky.addColorStop(0, '#86b9d9');
-    sky.addColorStop(.62, '#e8c99b');
-    sky.addColorStop(1, '#d6a56d');
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, W, H);
 
-    x.fillStyle = sky;
-    x.fillRect(0, 0, W, H);
+    ctx.fillStyle = "#fff0ae";
+    ctx.beginPath();
+    ctx.arc(980, 70, 34, 0, Math.PI * 2);
+    ctx.fill();
 
-    const glow = x.createRadialGradient(
-      sunX,
-      70,
-      5,
-      sunX,
-      70,
-      100
-    );
+    clouds.forEach(drawCloud);
 
-    glow.addColorStop(0, '#fff6bf');
-    glow.addColorStop(1, '#fff6bf00');
+    drawPyramid(820, 335, 210, 145);
+    drawPyramid(1010, 350, 150, 105);
+    drawPyramid(650, 355, 115, 78);
 
-    x.fillStyle = glow;
-    x.fillRect(sunX - 110, -40, 220, 220);
+    ctx.fillStyle = "#d8a66c";
+    ctx.fillRect(0, 330, W, H);
 
-    x.fillStyle = '#fff0ae';
-    x.beginPath();
-    x.arc(sunX, 70, 34, 0, Math.PI * 2);
-    x.fill();
-
-    clouds.forEach(cloud);
-
-    mountain(160, 330, 360, 160, '#b37e59');
-    mountain(440, 335, 430, 175, '#c18a60');
-    mountain(790, 330, 450, 190, '#9f6d50');
-    mountain(1080, 335, 350, 170, '#b77e58');
-
-    pyramid(820, 335, 210, 145);
-    pyramid(1010, 350, 150, 105);
-    pyramid(650, 355, 115, 78);
-
-    const sand = x.createLinearGradient(0, 330, 0, H);
-
-    sand.addColorStop(0, '#efd09a');
-    sand.addColorStop(.45, '#d8a66c');
-    sand.addColorStop(1, '#a96f47');
-
-    x.fillStyle = sand;
-    x.fillRect(0, 330, W, H);
-
-    for (let k = 0; k < 7; k++) {
-      x.strokeStyle = 'rgba(120,78,47,.18)';
-      x.lineWidth = 2;
-      x.beginPath();
-      x.moveTo(0, 350 + k * 24);
-      x.quadraticCurveTo(
-        W * .35,
-        340 + k * 24,
-        W,
-        360 + k * 24
-      );
-      x.stroke();
-    }
-
-    x.strokeStyle = '#8e6045';
-    x.lineWidth = 3;
-    x.beginPath();
-    x.moveTo(0, ground);
-    x.lineTo(W, ground);
-    x.stroke();
-
-    for (let i = 0; i < W; i += 55) {
-      x.fillStyle = i % 110 === 0 ? '#9b6e4c' : '#a97a53';
-      x.fillRect(i, ground + 13, 5, 3);
-    }
+    ctx.strokeStyle = "#8e6045";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(0, ground);
+    ctx.lineTo(W, ground);
+    ctx.stroke();
 
     for (let i = 0; i < 28; i++) {
-      const px = (i * 83 + tickOffset()) % W;
-      const py = ground + randStatic(i);
+      const px = (i * 83 + visualTime * 35) % W;
+      const py = ground + 10 + (i * 37) % 75;
 
-      x.fillStyle = i % 3 ? '#8d6042' : '#6f4a35';
-      x.beginPath();
-      x.ellipse(
-        px,
-        py,
-        randStatic(i + 4),
-        2,
-        0,
-        0,
-        Math.PI * 2
-      );
-      x.fill();
+      ctx.fillStyle = i % 3 ? "#8d6042" : "#6f4a35";
+      ctx.fillRect(px, py, 5, 3);
     }
 
-    obs
+    obstacles
       .slice()
       .sort((a, b) => b.x - a.x)
-      .forEach(cactus);
+      .forEach(drawCactus);
 
-    pixelDino();
-
-    dust.forEach(d => {
-      x.globalAlpha = d.life;
-      rect(d.x, d.y, 4, 3, '#8f6849');
-      x.globalAlpha = 1;
-    });
-  }
-
-  let visualT = 0;
-
-  function tickOffset() {
-    return (visualT * 35) % W;
-  }
-
-  function randStatic(i) {
-    return 10 + (i * 37) % 75;
+    drawDinosaur();
   }
 
   function update(dt) {
-    visualT += dt;
+    visualTime += dt;
     score += dt * 10;
     speed = Math.min(900, speed + dt * 5);
 
-    spawn -= dt;
-
+    spawnTimer -= dt;
     player.frame++;
 
-    if (spawn <= 0) {
-      const h = 58 + Math.random() * 48;
-
-      obs.push({
+    if (spawnTimer <= 0) {
+      obstacles.push({
         x: W + 50,
-        h,
+        h: 58 + Math.random() * 48,
         w: 56,
         s: .9 + Math.random() * .3
       });
 
-      spawn = 1.35 + Math.random() * 1.35;
+      spawnTimer = 1.35 + Math.random() * 1.35;
     }
 
     player.vy += 2400 * dt;
@@ -831,75 +763,168 @@ main {
     if (player.y >= ground - player.h) {
       player.y = ground - player.h;
       player.vy = 0;
-      player.on = true;
+      player.onGround = true;
     }
 
-    obs.forEach(o => {
+    obstacles.forEach(o => {
       o.x -= speed * dt;
     });
 
-    obs = obs.filter(o => o.x > -120);
+    obstacles = obstacles.filter(o => o.x > -130);
 
-    for (const o of obs) {
+    for (const o of obstacles) {
       if (
         o.x < player.x + player.w - 10 &&
         o.x + o.w > player.x + 10 &&
         player.y + player.h > ground - o.h + 8
       ) {
-        end();
+        endGame();
         return;
       }
     }
 
-    clouds.forEach(cl => {
-      cl.x -= speed * dt * .08;
+    clouds.forEach(cloud => {
+      cloud.x -= speed * dt * .08;
 
-      if (cl.x + cl.w < 0) {
-        cl.x = W + Math.random() * 200;
+      if (cloud.x + cloud.w < 0) {
+        cloud.x = W + Math.random() * 200;
       }
     });
 
-    hud();
+    updateScore();
   }
 
-  function loop(now) {
-    if (state !== 'playing') return;
+  function gameLoop(now) {
+    if (state !== "playing") return;
 
-    const dt = Math.min(.035, (now - last) / 1000);
-
-    last = now;
+    const dt = Math.min(.035, (now - lastTime) / 1000);
+    lastTime = now;
 
     update(dt);
     draw();
 
-    if (state === 'playing') {
-      requestAnimationFrame(loop);
+    if (state === "playing") {
+      requestAnimationFrame(gameLoop);
     }
   }
 
-  $('play').onclick = start;
-  $('again').onclick = start;
-  $('reset').onclick = start;
-  $('jump').onclick = jump;
+  async function saveScore() {
+    const name = $("playerName").value.trim();
+    const finalScore = Math.floor(score);
 
-  c.addEventListener('pointerdown', jump);
+    if (!name) {
+      $("saveMessage").textContent = "اكتب اسمك أولًا.";
+      return;
+    }
 
-  addEventListener('keydown', e => {
+    if (!currentUser) {
+      $("saveMessage").textContent =
+        "لم يتم الاتصال بـ Firebase.";
+      return;
+    }
+
+    if (finalScore <= 0) {
+      $("saveMessage").textContent =
+        "النتيجة غير صالحة.";
+      return;
+    }
+
+    $("sendScoreButton").disabled = true;
+    $("saveMessage").textContent = "جاري حفظ النتيجة...";
+
+    try {
+      await addDoc(collection(db, "scores"), {
+        name: name.substring(0, 20),
+        score: finalScore,
+        uid: currentUser.uid,
+        createdAt: serverTimestamp()
+      });
+
+      $("saveMessage").textContent =
+        "تم حفظ نتيجتك في جدول اللاعبين.";
+
+      await loadLeaderboard();
+    } catch (error) {
+      console.error("Save score error:", error);
+      $("saveMessage").textContent =
+        "حدث خطأ. تأكد من إعدادات Firestore.";
+    }
+
+    $("sendScoreButton").disabled = false;
+  }
+
+  async function loadLeaderboard() {
+    const list = $("leaderboard");
+
+    try {
+      const scoresQuery = query(
+        collection(db, "scores"),
+        orderBy("score", "desc"),
+        limit(10)
+      );
+
+      const result = await getDocs(scoresQuery);
+
+      list.innerHTML = "";
+
+      if (result.empty) {
+        list.innerHTML = "<li>لا توجد نتائج بعد.</li>";
+        return;
+      }
+
+      let rank = 1;
+
+      result.forEach(doc => {
+        const data = doc.data();
+
+        const li = document.createElement("li");
+
+        const name = document.createElement("span");
+        name.textContent =
+          rank + ". " + (data.name || "لاعب");
+
+        const points = document.createElement("strong");
+        points.textContent = Number(data.score || 0);
+
+        li.appendChild(name);
+        li.appendChild(points);
+        list.appendChild(li);
+
+        rank++;
+      });
+
+    } catch (error) {
+      console.error("Leaderboard error:", error);
+
+      $("leaderboardMessage").textContent =
+        "لم يتم تحميل النتائج. تحقق من قواعد Firestore.";
+    }
+  }
+
+  $("startButton").addEventListener("click", startGame);
+  $("restartButton").addEventListener("click", startGame);
+  $("resetButton").addEventListener("click", startGame);
+  $("jumpButton").addEventListener("click", jump);
+  $("sendScoreButton").addEventListener("click", saveScore);
+
+  canvas.addEventListener("pointerdown", jump);
+
+  window.addEventListener("keydown", event => {
     if (
-      e.code === 'Space' ||
-      e.code === 'ArrowUp'
+      event.code === "Space" ||
+      event.code === "ArrowUp"
     ) {
-      e.preventDefault();
+      event.preventDefault();
       jump();
     }
 
-    if (e.key.toLowerCase() === 'r') {
-      start();
+    if (event.key.toLowerCase() === "r") {
+      startGame();
     }
   });
 
-  reset();
-})();
+  resetGame();
+  loadLeaderboard();
 </script>
 
 </body>
